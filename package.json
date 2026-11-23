@@ -1,0 +1,19 @@
+{
+  "name": "pharma-supply-chain",
+  "version": "1.0.0",
+  "description": "Pharmaceutical Drug Supply-Chain Traceability and Anti-Counterfeit System using Blockchain",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "node": "npx hardhat node",
+    "deploy": "npx hardhat run scripts/deploy.js --network localhost",
+    "deploy:local": "npx hardhat run scripts/deploy.js --network localhost",
+    "frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": ["blockchain", "pharma", "supply-chain", "anti-counterfeit", "ethereum", "solidity"],
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  }
+}
