@@ -25,7 +25,7 @@ export const TEST_ACCOUNTS = {
     role: 3,
     name: 'MedDistribute Logistics (Distributor)',
     address: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
-    privateKey: '0x5de4111afa1a4b94908f83103eb272296ac6737420257cf7b456aed5607e3a56',
+    privateKey: '0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a',
     icon: '🚛',
   },
   pharmacy: {
@@ -41,7 +41,7 @@ export const TEST_ACCOUNTS = {
     role: 5,
     name: 'Viraj (Patient / Customer)',
     address: '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65',
-    privateKey: '0x47e179ec340f6c2c27027d1421633519c2a6f235882b5d44747230c14b2d49a0',
+    privateKey: '0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a',
     icon: '👤',
   },
 };

@@ -4,7 +4,7 @@ import { formatAddress, formatTimestamp, statusToString, statusToColor } from '.
 import toast from 'react-hot-toast';
 
 export default function PharmacyPanel() {
-  const { contract, role, account, recordTx } = useWeb3();
+  const { contract, role, account, recordTx, connectAsTestAccount } = useWeb3();
 
   // Sell form
   const [selectedDrugId, setSelectedDrugId] = useState('');
@@ -94,6 +94,10 @@ export default function PharmacyPanel() {
 
   const handleReceiveShipment = async (drugId) => {
     if (!contract) return;
+    if (role !== 4) {
+      toast.error('Only a registered pharmacy wallet can accept delivery! Please click "Switch to Pharmacy Wallet" above.', { duration: 5000 });
+      return;
+    }
     try {
       toast.loading(`Acknowledging delivery of batch #${drugId}…`, { id: 'pharmrecv' });
       const tx = await contract.receiveByPharmacy(drugId);
@@ -117,6 +121,10 @@ export default function PharmacyPanel() {
   const handleSellToCustomer = async (e) => {
     e.preventDefault();
     if (!contract) return;
+    if (role !== 4) {
+      toast.error('Only a registered pharmacy wallet can dispense medicine! Please click "Switch to Pharmacy Wallet" above.', { duration: 5000 });
+      return;
+    }
     if (!selectedDrugId || !customerAddress) {
       toast.error('Please choose a drug batch and buyer address');
       return;
@@ -192,8 +200,23 @@ export default function PharmacyPanel() {
       </div>
 
       {role !== 4 && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-4 py-3 rounded-2xl flex items-center gap-2">
-          <span className="text-base">ℹ️</span> You are not currently connected as a Pharmacy (Role #4). Switch roles using the top right switcher to sign as a registered pharmacy.
+        <div className="bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs px-5 py-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <strong>Active Wallet is not a Registered Pharmacy (Role #4).</strong>
+              <div className="text-emerald-800 text-[11px] mt-0.5">
+                On Ethereum, medicine dispensing and delivery receipt must be signed by the pharmacy's private key.
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => connectAsTestAccount('pharmacy')}
+            className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm whitespace-nowrap"
+          >
+            ⚡ Switch to Pharmacy Wallet
+          </button>
         </div>
       )}
 

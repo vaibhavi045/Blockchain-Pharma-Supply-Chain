@@ -4,7 +4,7 @@ import { formatAddress, formatTimestamp, statusToString, statusToColor } from '.
 import toast from 'react-hot-toast';
 
 export default function DistributorPanel() {
-  const { contract, role, account, recordTx } = useWeb3();
+  const { contract, role, account, recordTx, connectAsTestAccount } = useWeb3();
 
   // Ship to pharmacy form
   const [selectedDrugId, setSelectedDrugId] = useState('');
@@ -93,6 +93,10 @@ export default function DistributorPanel() {
 
   const handleReceiveShipment = async (drugId) => {
     if (!contract) return;
+    if (role !== 3) {
+      toast.error('Only a registered distributor wallet can sign receipt! Please click "Switch to Distributor Wallet" above.', { duration: 5000 });
+      return;
+    }
     try {
       toast.loading(`Confirming receipt of batch #${drugId} on blockchain…`, { id: 'recv' });
       const tx = await contract.receiveByDistributor(drugId);
@@ -191,8 +195,23 @@ export default function DistributorPanel() {
       </div>
 
       {role !== 3 && (
-        <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-4 py-3 rounded-2xl flex items-center gap-2">
-          <span className="text-base">ℹ️</span> You are not currently connected as a Distributor (Role #3). Switch roles using the top right switcher to sign as a registered distributor.
+        <div className="bg-amber-50 border border-amber-300 text-amber-900 text-xs px-5 py-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <strong>Active Wallet is not a Distributor (Role #3).</strong>
+              <div className="text-amber-800 text-[11px] mt-0.5">
+                On Ethereum, transactions must be signed by the registered distributor's private key.
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => connectAsTestAccount('distributor')}
+            className="bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm whitespace-nowrap"
+          >
+            ⚡ Switch to Distributor Wallet
+          </button>
         </div>
       )}
 

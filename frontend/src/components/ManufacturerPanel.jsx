@@ -5,7 +5,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import toast from 'react-hot-toast';
 
 export default function ManufacturerPanel() {
-  const { contract, role, account, recordTx } = useWeb3();
+  const { contract, role, account, recordTx, connectAsTestAccount } = useWeb3();
 
   // Registration form
   const [drugName, setDrugName] = useState('');
@@ -236,8 +236,23 @@ export default function ManufacturerPanel() {
       </div>
 
       {role !== 2 && (
-        <div className="bg-blue-50 border border-blue-200 text-blue-800 text-xs px-4 py-3 rounded-2xl flex items-center gap-2">
-          <span className="text-base">ℹ️</span> You are not currently connected as a registered Manufacturer (Role #2). You can use the top right Role Switcher or test if you hold manufacturer permissions.
+        <div className="bg-blue-50 border border-blue-300 text-blue-950 text-xs px-5 py-3.5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <strong>Active Wallet is not a Registered Manufacturer (Role #2).</strong>
+              <div className="text-blue-800 text-[11px] mt-0.5">
+                On Ethereum, minting drug batches and initial dispatch must be signed by the manufacturer's private key.
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => connectAsTestAccount('manufacturer')}
+            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm whitespace-nowrap"
+          >
+            ⚡ Switch to Manufacturer Wallet
+          </button>
         </div>
       )}
 
